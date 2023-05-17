@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<center>
+    <div class="bg-image" style="max-width: 22rem;">
+        <img src="static/site_photos/laughing_main.jpg" class="w-100" />
+        <div class="mask text-light d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.3)">
+            <h4>Fucking Memes Man!</h4>
+        </div>
+    </div>
+
+        <div class="container">
+            <div class="row">
+            {% for pic in pics %}
+                {% if pic.public %}
+                    <div class="col-md">
+                        <h5 class ='text-muted'>{{ pic.owner.username }}</h5>
+                        <p class="text-muted">{{ pic.date_posted.strftime('%Y-%m-%d') }}</p>
+                        <img src="{{url_for('static', filename = 'meme_photos/' + pic.image_file)}}" class= 'img-fluid'alt="This is a photo that was added">
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            </div>
+          </div>
+          
+  </div>
+</center>
+{% endblock content %}
+

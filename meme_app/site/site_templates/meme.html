@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section col-lg-4 float-left mt-5">
+        <form method="POST" action="" enctype = "multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="pt-2">Add Meme</legend>
+                    {{ form.picture(class="form-control-file") }}
+
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span><br>
+                        {% endfor %}
+                    {% endif %}
+                </fieldset>
+
+                <div class="form-check">
+                    {{ form.public(class="form-check-input") }}
+                    {{ form.public.label(class="form-check-label") }}
+                </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        
+        </form>
+</div>
+
+<div class = 'col-lg-8 float-right'>
+    <img class = 'img-fluid ' src="static/site_photos/meme_add.jpg" alt="">
+</div>
+{% endblock content %}
