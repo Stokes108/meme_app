@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, json
 from helpers import token_required
 from models import db, User, Meme, meme_schema, memes_schema
 from flask_login import current_user
-from helpers import save_picture
+from helpers import save_picture, delete_picture
 
 
 api = Blueprint('api', __name__, url_prefix = '/api', template_folder= 'api_templates')
@@ -15,7 +15,18 @@ api = Blueprint('api', __name__, url_prefix = '/api', template_folder= 'api_temp
 @api.route('/memes', methods= ['POST'])
 @token_required
 def create_meme(current_token):
-    given_file = request['file']
+
+    # file = open(app.root_path)
+
+    # e = MultipartEncoder({'upload[file]': (file.name, file, 'application/octet-stream'),
+    # 'upload[active]': 'True',
+    # 'upload[title]': 'Title From Python - Monitored with bar'})
+
+    #  payload = MultipartEncoderMonitor(e)
+
+
+    # url = f'http://127.0.0.1:5000/api/memes{current_token.token}'
+    given_file = request.json['file']
     meme_file = save_picture(given_file, 'meme_photos')
     public = request.json['public']
     user_token = current_token.token
@@ -43,7 +54,7 @@ def display_cars(current_token):
     return jsonify(response)
 
 # display a single car
-@api.route('/car/<id>', methods= ['GET'])
+@api.route('/meme/<id>', methods= ['GET'])
 @token_required
 def get_single_car(current_token, id):
     meme = Meme.query.get(id)
@@ -64,13 +75,18 @@ def update_car(current_token, id):
    response = meme_schema.dump(meme)
    return jsonify(response)
 
-# deleates a particular car
-@api.route('/car/<id>', methods = ['DELETE'])
+# deleates a particular meme
+@api.route('/meme/<id>', methods = ['DELETE'])
 @token_required
 def delete_car(current_token, id):
+
     meme = Meme.query.get(id)
     db.session.delete(meme)
     db.session.commit()
+
+    delete_picture(meme, 'meme_photos')
+
+    
     response = meme_schema.dump(meme)
     return jsonify(response)
 

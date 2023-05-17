@@ -30,10 +30,6 @@ def token_required(our_flask_func):
 
 
 def save_picture(form_picture, folder):
-    print(os.getcwd())
-    # basedir = os.path(os.path.dirname(__file__))
-
-
 
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
@@ -48,6 +44,12 @@ def save_picture(form_picture, folder):
     i.save(picture_path)
 
     return picture_fn
+
+def delete_picture(meme, folder):
+    picture_path = os.path.join(app.root_path, f'static/{folder}', meme.image_file)
+    os.remove(picture_path)
+
+
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):

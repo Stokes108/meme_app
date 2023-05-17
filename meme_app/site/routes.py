@@ -39,10 +39,11 @@ def account():
     form = UpdateAccountForm()
 
     if form.validate_on_submit():
-        picture_file = save_picture(form.picture.data, 'profile_pics')
-        current_user.profile_photo = picture_file
+        if form.picture.data:
+                
+            picture_file = save_picture(form.picture.data, 'profile_pics')
+            current_user.profile_photo = picture_file
 
-        print(form.picture.data)
 
         current_user.username = form.username.data
         current_user.email = form.email.data
