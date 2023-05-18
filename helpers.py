@@ -3,7 +3,7 @@ import secrets
 from flask import request, jsonify, json
 import decimal 
 from models import User
-from meme_app import app
+from app import app
 
 def token_required(our_flask_func):
     @wraps(our_flask_func)
