@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, json
 from helpers import token_required
 from models import db, User, Meme, meme_schema, memes_schema
 from flask_login import current_user
-from meme_app import save_picture, delete_picture
+from helpers import save_picture, delete_picture
 
 
 api = Blueprint('api', __name__, url_prefix = '/api', template_folder= 'api_templates')
