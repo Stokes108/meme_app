@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from forms import  AddMemeForm, UpdateAccountForm
 from models import  Meme, db
 from flask_login import current_user, login_required
-from helpers import save_picture
+from meme_app import save_picture
 
 
 site = Blueprint('site', __name__, template_folder = 'site_templates')

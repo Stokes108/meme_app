@@ -2,10 +2,7 @@ from functools import wraps
 import secrets
 from flask import request, jsonify, json
 import decimal 
-import os
-from PIL import Image
 from models import User
-from meme_app import app
 
 def token_required(our_flask_func):
     @wraps(our_flask_func)
@@ -29,25 +26,6 @@ def token_required(our_flask_func):
     return decorated
 
 
-def save_picture(form_picture, folder):
-
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, f'static/{folder}', picture_fn)
-    
-    i = Image.open(form_picture)
-
-    if folder == 'profile_pics':
-        output_size = (125, 125)
-        i.thumbnail(output_size)    
-    i.save(picture_path)
-
-    return picture_fn
-
-def delete_picture(meme, folder):
-    picture_path = os.path.join(app.root_path, f'static/{folder}', meme.image_file)
-    os.remove(picture_path)
 
 
 
