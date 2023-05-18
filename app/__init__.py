@@ -1,8 +1,5 @@
 from flask import Flask
 from config import Config
-import os
-from PIL import Image
-import secrets
 
 from flask_sqlalchemy import SQLAlchemy 
 from flask_migrate import Migrate

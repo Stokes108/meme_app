@@ -4,6 +4,10 @@ from flask import request, jsonify, json
 import decimal 
 from models import User
 from app import app
+import os
+from PIL import Image
+import secrets
+
 
 def token_required(our_flask_func):
     @wraps(our_flask_func)
