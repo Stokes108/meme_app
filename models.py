@@ -60,9 +60,11 @@ class User(db.Model, UserMixin):
 
 class Meme(db.Model):
     id = db.Column(db.String, primary_key = True)
-    content = db.Column(db.Text, nullable = False, default='')
+    content_top = db.Column(db.String(200), nullable = True, default='')
+    content_bottom = db.Column(db.String(200), nullable = True, default='')
+
     image_file = db.Column(db.String(100), nullable = False)
-    date_posted = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime, nullable = True, default=datetime.utcnow)
     user_token = db.Column(db.String, db.ForeignKey('user.token'),nullable = False)
     public = db.Column(db.Boolean, nullable = False, default = False)
     owner = db.relationship('User' , back_populates ='memes')
