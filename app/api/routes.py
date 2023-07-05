@@ -29,6 +29,8 @@ def create_meme(current_token):
     given_file = request.json['file']
     meme_file = save_picture(given_file, 'meme_photos')
     public = request.json['public']
+    content_top = request.json['content_top']
+    content_bottom = request.json['content_bottom']
     user_token = current_token.token
 
     print(type(public))
@@ -38,7 +40,7 @@ def create_meme(current_token):
     print(type(public))
     print(f'BIG TESTER: {current_token.token}')
 
-    meme = Meme(meme_file, user_token = user_token, public = public)
+    meme = Meme(meme_file, content_top = content_top, content_bottom = content_bottom, user_token = user_token, public = public)
     db.session.add(meme)
     db.session.commit()
     response = meme_schema.dump(meme)
@@ -63,12 +65,15 @@ def get_single_car(current_token, id):
 
 
 #update a particular car
-@api.route('cars/<id>', methods = ['POST', 'PUT'])
+@api.route('meme/<id>', methods = ['POST', 'PUT'])
 @token_required
 def update_car(current_token, id):
    meme = Meme.query.get(id)
-   meme.content = request.json['content']
-   meme.picture = request.json['picture']
+   meme.content_top = request.json['content_top']
+   meme.content_bottom = request.json['content_bottom']
+   print(request.json['content_top'])
+
+#    meme.picture = request.json['picture']
    meme.user_token = current_token.token
 
    db.session.commit()

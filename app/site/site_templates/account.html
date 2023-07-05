@@ -66,7 +66,6 @@
             <div class="row">
             {% for pic in current_user.memes %}
               <div class="col-sm">
-                <p class="text-muted">{{ pic.date_posted.strftime('%Y-%m-%d') }}</p>
                 <img src="{{url_for('static', filename = 'meme_photos/' + pic.image_file)}}" alt="This is a custom photo that was added">
               </div>
             {% endfor %}

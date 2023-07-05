@@ -60,8 +60,9 @@ class User(db.Model, UserMixin):
 
 class Meme(db.Model):
     id = db.Column(db.String, primary_key = True)
-    content_top = db.Column(db.String(200), nullable = True, default='')
-    content_bottom = db.Column(db.String(200), nullable = True, default='')
+    content_bottom = db.Column(db.String(250), nullable = False, default="", server_default = '')
+    content_top = db.Column(db.String(250), nullable = False, default = "", server_default = '')
+
 
     image_file = db.Column(db.String(100), nullable = False)
     date_posted = db.Column(db.DateTime, nullable = True, default=datetime.utcnow)
@@ -85,7 +86,7 @@ class Meme(db.Model):
  
 class MemeSchema(ma.Schema):
     class Meta:
-        fields  = ['id', 'content', 'image_file', 'public']
+        fields  = ['id', 'content_top',  'content_bottom', 'image_file', 'public']
 
 meme_schema = MemeSchema()
 memes_schema = MemeSchema(many = True)
