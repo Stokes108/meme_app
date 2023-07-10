@@ -67,12 +67,14 @@ class Meme(db.Model):
     image_file = db.Column(db.String(100), nullable = False)
     date_posted = db.Column(db.DateTime, nullable = True, default=datetime.utcnow)
     user_token = db.Column(db.String, db.ForeignKey('user.token'),nullable = False)
-    public = db.Column(db.Boolean, nullable = False, default = False)
+    public = db.Column(db.Boolean, nullable = True)
     owner = db.relationship('User' , back_populates ='memes')
 
-    def __init__ (self, image_file, user_token, public ,content = 'This is your meme!!!!'):
+    def __init__ (self, image_file, user_token, public ,content_top, content_bottom):
         self.id = self.set_id()
-        self.content = content
+        self.content_top = content_top
+        self.content_bottom = content_bottom
+
         self.public = public
         self.image_file = image_file
         self.user_token = user_token
@@ -90,3 +92,13 @@ class MemeSchema(ma.Schema):
 
 meme_schema = MemeSchema()
 memes_schema = MemeSchema(many = True)
+
+
+class PictureState():
+
+    def __init__(self):
+        self.pic_path = ''
+    
+    def setPic (self, picPath):
+        self.pic_path= picPath
+        

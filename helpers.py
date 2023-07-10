@@ -14,11 +14,12 @@ def token_required(our_flask_func):
     def decorated(*args, **kwargs):
         token = None
 
+
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token'].split(' ')[1]
         if not token:
             return jsonify({'message' : 'Token is missing.'})
-        
+
         try:
             current_token = User.query.filter_by(token = token).first()
         except:

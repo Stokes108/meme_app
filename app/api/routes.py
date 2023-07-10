@@ -1,46 +1,53 @@
 from flask import Blueprint, request, jsonify, render_template, json
 from helpers import token_required
-from models import db, User, Meme, meme_schema, memes_schema
+from models import db, User, Meme, meme_schema, memes_schema, PictureState
 from flask_login import current_user
 from helpers import save_picture, delete_picture
 
 
+
 api = Blueprint('api', __name__, url_prefix = '/api', template_folder= 'api_templates')
 
+pic = PictureState()
+
+
+@api.route('/memes-picture', methods= ['GET'])
+@token_required
+def get_pic_path(current_token):
+    print(pic.pic_path)
+    pic_dict = {'pic_path': pic.pic_path}
+    return jsonify(pic_dict)
 
 
 
+@api.route('/memes-picture', methods= ['POST'])
+@token_required
+def save_meme_picture(current_token):
+    given_file = request.files['file']
+    meme_file = save_picture(given_file, 'meme_photos')
+    pic.setPic(meme_file)
+    print(pic.pic_path)
+    return jsonify(meme_file)
 
 
 @api.route('/memes', methods= ['POST'])
 @token_required
 def create_meme(current_token):
 
-    # file = open(app.root_path)
 
-    # e = MultipartEncoder({'upload[file]': (file.name, file, 'application/octet-stream'),
-    # 'upload[active]': 'True',
-    # 'upload[title]': 'Title From Python - Monitored with bar'})
-
-    #  payload = MultipartEncoderMonitor(e)
-
-
-    # url = f'http://127.0.0.1:5000/api/memes{current_token.token}'
-    given_file = request.json['file']
-    meme_file = save_picture(given_file, 'meme_photos')
-    public = request.json['public']
+    meme_pic = request.json['file']
     content_top = request.json['content_top']
     content_bottom = request.json['content_bottom']
+    public = request.json['public']
+
     user_token = current_token.token
 
-    print(type(public))
-    print(public)
 
 
-    print(type(public))
+
     print(f'BIG TESTER: {current_token.token}')
 
-    meme = Meme(meme_file, content_top = content_top, content_bottom = content_bottom, user_token = user_token, public = public)
+    meme = Meme(meme_pic, content_top = content_top, content_bottom = content_bottom, public=public, user_token = user_token)
     db.session.add(meme)
     db.session.commit()
     response = meme_schema.dump(meme)
@@ -50,6 +57,7 @@ def create_meme(current_token):
 @api.route('/memes', methods= ['GET'])
 @token_required
 def display_cars(current_token):
+
     user = current_token.token
     memes = Meme.query.filter_by(user_token = user).all()
     response = memes_schema.dump(memes)
